@@ -11,29 +11,42 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+It is a card that looks like a cartoon paper. it is kinda customizable
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+borderColor: changed the border color.
+backgroundColor: changed the background color.
+borderRadius: changed the border radius.
+borderThickness: thickness of the border.
+elevation: elevation or the shadow behind card.
+elevation: elevation or the shadow behind card.
+crayonTexture: If the texture of crayon should be on the card.
+margin: margin.
+padding: padding inside border.
+height: changed the height.
+width: changed the width.
+child: child to your widget.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
 ```dart
-const like = 'sample';
+PaperCard(
+                height: 200,
+                width: 200,
+                borderColor: Colors.red,
+                backgroundColor: Color.fromARGB(255, 139, 222, 255),
+                borderRadius: 25,
+                borderThickness: 20,
+                elevation: 2,
+                padding: EdgeInsets.all(16),
+                margin: EdgeInsets.all(16),
+                crayonTexture: true,
+                crayonTextureBlendMode: BlendMode.overlay,
+                child: Text(
+                  'Hello World This is just a test text',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  textDirection: TextDirection.rtl,
+                ),
+              )
 ```
-
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.

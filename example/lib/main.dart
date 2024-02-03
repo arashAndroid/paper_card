@@ -22,28 +22,35 @@ class MainApp extends StatelessWidget {
               PaperCard(
                 height: 200,
                 width: 200,
+                borderColor: Colors.red,
+                backgroundColor: Color.fromARGB(255, 139, 222, 255),
+                borderRadius: 25,
+                borderThickness: 20,
+                elevation: 2,
+                padding: EdgeInsets.all(16),
+                margin: EdgeInsets.all(16),
+                crayonTexture: true,
+                crayonTextureBlendMode: BlendMode.overlay,
                 child: Text(
-                  'راه اندازیسرویس ارسال نتیجه صدور مجوزهای اعلانی',
-                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
+                  'Hello World This is just a test text',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   textDirection: TextDirection.rtl,
                 ),
-                backgroundColor: Color(0xFFFFF9E3),
               ),
+              PaperCard(
+                  height: 100,
+                  width: 200,
+                  child: Text(
+                    'تست فارسی ۱: سلام دنیا',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                    textDirection: TextDirection.rtl,
+                  ),
+                  backgroundColor: Color.fromARGB(255, 247, 136, 136)),
               PaperCard(
                 height: 100,
                 width: 200,
                 child: Text(
-                  'راه اندازیسرویس ارسال نتیجه صدور مجوزهای اعلانی',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-                  textDirection: TextDirection.rtl,
-                ),
-                backgroundColor: Color(0xFFFFF9E3),
-              ),
-              PaperCard(
-                height: 100,
-                width: 200,
-                child: Text(
-                  'راه اندازیسرویس ارسال نتیجه صدور مجوزهای اعلانی',
+                  'تست فارسی ۱: سلام دنیا',
                   style: TextStyle(fontWeight: FontWeight.w900, fontSize: 17),
                   textDirection: TextDirection.rtl,
                 ),
@@ -53,7 +60,7 @@ class MainApp extends StatelessWidget {
                 height: 100,
                 width: 200,
                 child: Text(
-                  'راه اندازیسرویس ارسال نتیجه صدور مجوزهای اعلانی',
+                  'تست فارسی ۱: سلام دنیا',
                   style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
                   textDirection: TextDirection.rtl,
                 ),

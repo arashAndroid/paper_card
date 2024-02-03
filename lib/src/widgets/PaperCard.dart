@@ -14,9 +14,10 @@ class PaperCard extends StatelessWidget {
   final double? borderThickness;
   final double? borderRadius;
   final double? elevation;
-  final Clip? clipBehavior;
   final double? height;
   final double? width;
+  final bool crayonTexture;
+  final BlendMode crayonTextureBlendMode;
 
   const PaperCard({
     Key? key,
@@ -29,65 +30,69 @@ class PaperCard extends StatelessWidget {
     this.borderColor = const Color(0xFF1A2421),
     this.borderThickness = 6,
     this.borderRadius = 5,
-    this.elevation = 10,
-    this.clipBehavior = Clip.none,
+    this.elevation = 2,
+    this.crayonTexture = true,
+    this.crayonTextureBlendMode = BlendMode.overlay,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.passthrough,
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(null ?? 15),
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: Colors.black.withOpacity(0.2),
-            //     blurRadius: 0,
-            //     spreadRadius: -5,
-            //     offset: Offset(0, elevation ?? 5),
-            //   ),
-            // ],
-          ),
-          child: CustomPaint(
-            painter: PaintCard(
+    return Container(
+      margin: margin,
+      child: Stack(
+        fit: StackFit.passthrough,
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(borderRadius ?? 5),
+            ),
+            child: CustomPaint(
+              painter: PaintCard(
                 borderThickness: borderThickness ?? 5,
                 backgroundColor: backgroundColor ?? Colors.white,
                 borderColor: borderColor ?? const Color(0xFF020202),
-                borderRadius: borderRadius ?? 5),
-            child: PhysicalModel(
-              color: Colors.transparent,
-              elevation: 0.0,
-              borderRadius: BorderRadius.circular(borderRadius ?? 5),
-              child: Container(
-                padding: padding,
-                margin: margin,
-                height: height,
-                width: width,
-                child: Padding(
-                  padding: EdgeInsets.all(borderThickness ?? 5.0),
-                  child: child,
+                borderRadius: borderRadius ?? 5,
+                elevation: elevation ?? 1,
+              ),
+              child: PhysicalModel(
+                color: Colors.transparent,
+                elevation: 0.0,
+                borderRadius: BorderRadius.circular(borderRadius ?? 5),
+                child: Container(
+                  padding: padding,
+                  height: height,
+                  width: width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(borderRadius ?? 5),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(borderThickness ?? 5.0),
+                    child: child,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Positioned.fill(
-          child: SaveLayer(
-            paint: Paint()..blendMode = BlendMode.overlay,
-            child: RotatedBox(
-              quarterTurns: Random().nextInt(4),
-              child: const Image(
-                image: AssetImage('assets/crayon_mask.png'),
-                fit: BoxFit.cover,
+          if (crayonTexture)
+            Positioned.fill(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(borderRadius ?? 5),
+                child: SaveLayer(
+                  paint: Paint()..blendMode = crayonTextureBlendMode,
+                  child: RotatedBox(
+                    quarterTurns: Random().nextInt(4),
+                    child: const Image(
+                      image: AssetImage('assets/crayon_mask.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -101,8 +106,9 @@ class PaintCard extends CustomPainter {
 
   final double borderThickness;
   final double borderRadius;
+  final double elevation;
 
-  PaintCard({required this.backgroundColor, required this.borderColor, required this.borderRadius, this.borderThickness = 5.0});
+  PaintCard({this.elevation = 1.0, required this.backgroundColor, required this.borderColor, required this.borderRadius, this.borderThickness = 5.0});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -349,8 +355,8 @@ class PaintCard extends CustomPainter {
     pathInside.close();
 
     // Calculate translation values
-    double translateY = 5;
-    double translateX = 4;
+    double translateY = elevation * 2.5;
+    double translateX = elevation * 2;
     // Create a copy of the original path
     Path copiedPath = Path.from(path);
     // Apply translation to the copied path
