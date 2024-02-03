@@ -10,8 +10,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
+    return MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'darya',
+      ),
+      home: const Scaffold(
         body: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -21,7 +24,7 @@ class MainApp extends StatelessWidget {
                 width: 200,
                 child: Text(
                   'راه اندازیسرویس ارسال نتیجه صدور مجوزهای اعلانی',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
                   textDirection: TextDirection.rtl,
                 ),
                 backgroundColor: Color(0xFFFFF9E3),
@@ -31,7 +34,27 @@ class MainApp extends StatelessWidget {
                 width: 200,
                 child: Text(
                   'راه اندازیسرویس ارسال نتیجه صدور مجوزهای اعلانی',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                  textDirection: TextDirection.rtl,
+                ),
+                backgroundColor: Color(0xFFFFF9E3),
+              ),
+              PaperCard(
+                height: 100,
+                width: 200,
+                child: Text(
+                  'راه اندازیسرویس ارسال نتیجه صدور مجوزهای اعلانی',
+                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 17),
+                  textDirection: TextDirection.rtl,
+                ),
+                backgroundColor: Color(0xFFFFF9E3),
+              ),
+              PaperCard(
+                height: 100,
+                width: 200,
+                child: Text(
+                  'راه اندازیسرویس ارسال نتیجه صدور مجوزهای اعلانی',
+                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
                   textDirection: TextDirection.rtl,
                 ),
                 backgroundColor: Color(0xFFFFF9E3),

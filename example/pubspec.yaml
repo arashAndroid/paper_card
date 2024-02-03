@@ -23,3 +23,21 @@ flutter:
 
   assets:
     - assets/
+
+  fonts:
+    - family: badkhat
+      fonts:
+        - asset: assets/badkhat.ttf
+    - family: darya
+      fonts:
+        - asset: assets/darya.ttf
+    - family: paeez
+      fonts:
+        - asset: assets/paeez.ttf
+    - family: shekari
+      fonts:
+        - asset: assets/shekari.ttf
+    - family: khodkar
+      fonts:
+        - asset: assets/khodkar.ttf
+
