@@ -6,17 +6,43 @@ import 'package:flutter/services.dart';
 import 'package:widget_mask/widget_mask.dart';
 
 class PaperCard extends StatelessWidget {
+  /// child to your widget.
   final Widget? child;
+
+  /// padding inside border.
   final EdgeInsetsGeometry? padding;
+
+  /// margin.
   final EdgeInsetsGeometry? margin;
+
+  /// changed the background color.
   final Color? backgroundColor;
+
+  /// changed the border color.
   final Color? borderColor;
+
+  /// thickness of the border.
   final double? borderThickness;
+
+  /// changed the border radius.
   final double? borderRadius;
+
+  /// elevation or the shadow behind card.
   final double? elevation;
+
+  /// change the height.
   final double? height;
+
+  /// change the width.
   final double? width;
+
+  /// Put image in assets and provide path for crayon texture (there is an example texture in example).
+  final String? crayonAssetPath;
+
+  /// If the texture of crayon should be on the card.
   final bool crayonTexture;
+
+  /// BlendMode for the crayon texture.
   final BlendMode crayonTextureBlendMode;
 
   const PaperCard({
@@ -32,6 +58,7 @@ class PaperCard extends StatelessWidget {
     this.borderRadius = 5,
     this.elevation = 2,
     this.crayonTexture = true,
+    this.crayonAssetPath,
     this.crayonTextureBlendMode = BlendMode.overlay,
   }) : super(key: key);
 
@@ -75,7 +102,7 @@ class PaperCard extends StatelessWidget {
               ),
             ),
           ),
-          if (crayonTexture)
+          if (crayonTexture && crayonAssetPath != null)
             Positioned.fill(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(borderRadius ?? 5),
@@ -83,8 +110,8 @@ class PaperCard extends StatelessWidget {
                   paint: Paint()..blendMode = crayonTextureBlendMode,
                   child: RotatedBox(
                     quarterTurns: Random().nextInt(4),
-                    child: const Image(
-                      image: AssetImage('assets/crayon_mask.png'),
+                    child: Image(
+                      image: AssetImage(crayonAssetPath!),
                       fit: BoxFit.cover,
                     ),
                   ),

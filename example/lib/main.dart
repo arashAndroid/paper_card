@@ -30,10 +30,11 @@ class MainApp extends StatelessWidget {
                 padding: EdgeInsets.all(16),
                 margin: EdgeInsets.all(16),
                 crayonTexture: true,
+                crayonAssetPath: 'assets/crayon_mask.png',
                 crayonTextureBlendMode: BlendMode.overlay,
                 child: Text(
                   'Hello World This is just a test text',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 14),
                   textDirection: TextDirection.rtl,
                 ),
               ),

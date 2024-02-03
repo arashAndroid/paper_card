@@ -20,12 +20,13 @@ backgroundColor: changed the background color.
 borderRadius: changed the border radius.
 borderThickness: thickness of the border.
 elevation: elevation or the shadow behind card.
-elevation: elevation or the shadow behind card.
 crayonTexture: If the texture of crayon should be on the card.
+crayonAssetPath: Put image in assets and provide path for crayon texture (there is an example texture in example).
+crayonTextureBlendMode: BlendMode for the crayon texture.
 margin: margin.
 padding: padding inside border.
-height: changed the height.
-width: changed the width.
+height: change the height.
+width: change the width.
 child: child to your widget.
 
 ## Usage
