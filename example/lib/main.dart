@@ -41,6 +41,7 @@ class MainApp extends StatelessWidget {
               PaperCard(
                   height: 100,
                   width: 200,
+                  crayonAssetPath: 'assets/crayon_mask.png',
                   child: Text(
                     'تست فارسی ۱: سلام دنیا',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
@@ -50,6 +51,7 @@ class MainApp extends StatelessWidget {
               PaperCard(
                 height: 100,
                 width: 200,
+                crayonAssetPath: 'assets/crayon_mask.png',
                 child: Text(
                   'تست فارسی ۱: سلام دنیا',
                   style: TextStyle(fontWeight: FontWeight.w900, fontSize: 17),
@@ -60,6 +62,7 @@ class MainApp extends StatelessWidget {
               PaperCard(
                 height: 100,
                 width: 200,
+                crayonAssetPath: 'assets/crayon_mask.png',
                 child: Text(
                   'تست فارسی ۱: سلام دنیا',
                   style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
