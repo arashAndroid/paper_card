@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter/services.dart';
 import 'package:widget_mask/widget_mask.dart';
 
 class PaperCard extends StatelessWidget {

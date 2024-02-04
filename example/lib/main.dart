@@ -39,19 +39,22 @@ class MainApp extends StatelessWidget {
                 ),
               ),
               PaperCard(
-                  height: 100,
-                  width: 200,
-                  crayonAssetPath: 'assets/crayon_mask.png',
-                  child: Text(
-                    'تست فارسی ۱: سلام دنیا',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-                    textDirection: TextDirection.rtl,
-                  ),
-                  backgroundColor: Color.fromARGB(255, 247, 136, 136)),
+                height: 200,
+                width: 150,
+                crayonAssetPath: 'assets/crayon_mask.png',
+                borderThickness: 0,
+                child: Text(
+                  'تست فارسی ۱: سلام دنیا',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                  textDirection: TextDirection.rtl,
+                ),
+                backgroundColor: Color(0xFFFFF9E3),
+              ),
               PaperCard(
                 height: 100,
                 width: 200,
-                crayonAssetPath: 'assets/crayon_mask.png',
+                borderRadius: 20,
+                borderThickness: 5,
                 child: Text(
                   'تست فارسی ۱: سلام دنیا',
                   style: TextStyle(fontWeight: FontWeight.w900, fontSize: 17),
