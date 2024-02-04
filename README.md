@@ -11,7 +11,10 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-It is a card that looks like a cartoon paper. it is kinda customizable
+It is a card that looks like a cartoon paper. it is customizable
+
+<p align="center">
+	<img src="https://raw.githubusercontent.com/arashAndroid/paper_card/master/screenshots/1.jpg" alt="Paper card Screen Shot 1" />
 
 ## Features
 
