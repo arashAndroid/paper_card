@@ -55,12 +55,13 @@ class MainApp extends StatelessWidget {
                 width: 200,
                 borderRadius: 20,
                 borderThickness: 5,
+                elevation: 0,
+                backgroundColor: Colors.transparent,
                 child: Text(
-                  'تست فارسی ۱: سلام دنیا',
+                  'تست فارسی ۲: سلام دنیا',
                   style: TextStyle(fontWeight: FontWeight.w900, fontSize: 17),
                   textDirection: TextDirection.rtl,
                 ),
-                backgroundColor: Color(0xFFFFF9E3),
               ),
               PaperCard(
                 height: 100,

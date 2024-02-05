@@ -35,6 +35,9 @@ class PaperCard extends StatelessWidget {
   /// change the width.
   final double? width;
 
+  /// change the width.
+  final double? shadowOpacity;
+
   /// Put image in assets and provide path for crayon texture (there is an example texture in example).
   final String? crayonAssetPath;
 
@@ -56,6 +59,7 @@ class PaperCard extends StatelessWidget {
     this.borderThickness = 6,
     this.borderRadius = 5,
     this.elevation = 2,
+    this.shadowOpacity = 0.2,
     this.crayonTexture = true,
     this.crayonAssetPath,
     this.crayonTextureBlendMode = BlendMode.overlay,
@@ -81,6 +85,7 @@ class PaperCard extends StatelessWidget {
                 borderColor: borderColor ?? const Color(0xFF020202),
                 borderRadius: borderRadius ?? 5,
                 elevation: elevation ?? 1,
+                shadowOpacity: shadowOpacity ?? 50,
               ),
               child: PhysicalModel(
                 color: Colors.transparent,
@@ -133,30 +138,30 @@ class PaintCard extends CustomPainter {
   final double borderThickness;
   final double borderRadius;
   final double elevation;
+  final double shadowOpacity;
 
-  PaintCard({this.elevation = 1.0, required this.backgroundColor, required this.borderColor, required this.borderRadius, this.borderThickness = 5.0});
+  PaintCard({
+    this.elevation = 1.0,
+    required this.backgroundColor,
+    required this.borderColor,
+    required this.borderRadius,
+    this.borderThickness = 5.0,
+    this.shadowOpacity = 50,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     final h = size.height;
     final w = size.width;
 
-    final paint = Paint()..color = backgroundColor;
-    final borderPaint = Paint()..color = borderColor.withOpacity(0.5)
-        // ..style = PaintingStyle.stroke
-        // ..strokeJoin = StrokeJoin.round
-        // ..strokeCap = StrokeCap.round
-        // ..strokeWidth = borderThickness
-        ;
-
-    final path = Path();
+    final pathBorder = Path();
 
     // Calculate adjusted radius considering half stroke width
-    double a = borderRadius - borderPaint.strokeWidth / 2;
+    double a = borderRadius - borderThickness / 2;
     // a = 5;
     double s = 0;
     // Start
-    path.moveTo(a + s, s);
+    pathBorder.moveTo(a + s, s);
     // path.arcToPoint(Offset(0, adjustedRadius), radius: Radius.circular(adjustedRadius));
     // Generate random zigzag points
     int zigzagCountHorizontal = (h / 50).floor(); // Adjust the number of zigzags as needed
@@ -175,9 +180,9 @@ class PaintCard extends CustomPainter {
     // Draw the zigzag path with rounded curves
     for (int i = 0; i < zigzagCountHorizontal; i++) {
       if (i == 0) {
-        path.lineTo(zigzagPoints[i].dx, zigzagPoints[i].dy); // Move to first point
+        pathBorder.lineTo(zigzagPoints[i].dx, zigzagPoints[i].dy); // Move to first point
       } else {
-        path.quadraticBezierTo(
+        pathBorder.quadraticBezierTo(
           (zigzagPoints[i - 1].dx + zigzagPoints[i].dx) / 2,
           zigzagPoints[i - 1].dy, // Control point for rounded curve
           zigzagPoints[i].dx,
@@ -186,8 +191,8 @@ class PaintCard extends CustomPainter {
       }
     }
     // Top-right corner
-    path.lineTo(w - a - s, s);
-    path.arcToPoint(Offset(w - s, a + s), radius: Radius.circular(a));
+    pathBorder.lineTo(w - a - s, s);
+    pathBorder.arcToPoint(Offset(w - s, a + s), radius: Radius.circular(a));
     // Generate random zigzag points vertically
     zigzagPoints = List.generate(
         zigzagCountVertical,
@@ -199,9 +204,9 @@ class PaintCard extends CustomPainter {
     // Draw the zigzag path with rounded curves vertically
     for (int i = 0; i < zigzagCountVertical; i++) {
       if (i == 0) {
-        path.lineTo(zigzagPoints[i].dx, zigzagPoints[i].dy); // Move to first point
+        pathBorder.lineTo(zigzagPoints[i].dx, zigzagPoints[i].dy); // Move to first point
       } else {
-        path.quadraticBezierTo(
+        pathBorder.quadraticBezierTo(
           zigzagPoints[i - 1].dx,
           (zigzagPoints[i - 1].dy + zigzagPoints[i].dy) / 2, // Control point for rounded curve
           zigzagPoints[i].dx,
@@ -211,8 +216,8 @@ class PaintCard extends CustomPainter {
     }
 
     // Bottom-right corner
-    path.lineTo(w - s, h - a - s);
-    path.arcToPoint(Offset(w - a - s, h - s), radius: Radius.circular(a));
+    pathBorder.lineTo(w - s, h - a - s);
+    pathBorder.arcToPoint(Offset(w - a - s, h - s), radius: Radius.circular(a));
 
     // Generate random zigzag points horizontally for the bottom part
     final randomBottom = Random();
@@ -226,9 +231,9 @@ class PaintCard extends CustomPainter {
     // Draw the zigzag path with rounded curves for the bottom part
     for (int i = 0; i < zigzagCountHorizontal; i++) {
       if (i == 0) {
-        path.lineTo(zigzagPointsBottom[i].dx, zigzagPointsBottom[i].dy); // Move to first point
+        pathBorder.lineTo(zigzagPointsBottom[i].dx, zigzagPointsBottom[i].dy); // Move to first point
       } else {
-        path.quadraticBezierTo(
+        pathBorder.quadraticBezierTo(
           (zigzagPointsBottom[i - 1].dx + zigzagPointsBottom[i].dx) / 2,
           zigzagPointsBottom[i - 1].dy, // Control point for rounded curve
           zigzagPointsBottom[i].dx,
@@ -238,8 +243,8 @@ class PaintCard extends CustomPainter {
     }
 
     // Bottom-left corner
-    path.lineTo(a + s, h - s);
-    path.arcToPoint(Offset(s, h - a - s), radius: Radius.circular(a));
+    pathBorder.lineTo(a + s, h - s);
+    pathBorder.arcToPoint(Offset(s, h - a - s), radius: Radius.circular(a));
 
     // Generate random zigzag points vertically for the left side
     final randomLeft = Random();
@@ -250,12 +255,12 @@ class PaintCard extends CustomPainter {
               h - a - s - (i + 1) * (h - 2 * a - 2 * s) / (zigzagCountVertical + 1),
             ));
 
-// Draw the zigzag path with rounded curves for the left side
+    // Draw the zigzag path with rounded curves for the left side
     for (int i = 0; i < zigzagCountVertical; i++) {
       if (i == 0) {
-        path.lineTo(zigzagPointsLeft[i].dx, zigzagPointsLeft[i].dy); // Move to first point
+        pathBorder.lineTo(zigzagPointsLeft[i].dx, zigzagPointsLeft[i].dy); // Move to first point
       } else {
-        path.quadraticBezierTo(
+        pathBorder.quadraticBezierTo(
           zigzagPointsLeft[i - 1].dx,
           (zigzagPointsLeft[i - 1].dy + zigzagPointsLeft[i].dy) / 2, // Control point for rounded curve
           zigzagPointsLeft[i].dx,
@@ -265,17 +270,17 @@ class PaintCard extends CustomPainter {
     }
 
     // Top-left corner
-    path.lineTo(s, a + s);
-    path.arcToPoint(Offset(a + s, s), radius: Radius.circular(a));
+    pathBorder.lineTo(s, a + s);
+    pathBorder.arcToPoint(Offset(a + s, s), radius: Radius.circular(a));
 
     // Close the path
-    path.close();
+    pathBorder.close();
 
     s = borderThickness / 2;
 
-    final pathInside = Path();
+    final pathFill = Path();
     // Start
-    pathInside.moveTo(a + s, s);
+    pathFill.moveTo(a + s, s);
 
     zigzagPoints = List.generate(
         zigzagCountHorizontal,
@@ -286,9 +291,9 @@ class PaintCard extends CustomPainter {
     // Draw the zigzag pathInside with rounded curves
     for (int i = 0; i < zigzagCountHorizontal; i++) {
       if (i == 0) {
-        pathInside.lineTo(zigzagPoints[i].dx, zigzagPoints[i].dy); // Move to first point
+        pathFill.lineTo(zigzagPoints[i].dx, zigzagPoints[i].dy); // Move to first point
       } else {
-        pathInside.quadraticBezierTo(
+        pathFill.quadraticBezierTo(
           (zigzagPoints[i - 1].dx + zigzagPoints[i].dx) / 2,
           zigzagPoints[i - 1].dy, // Control point for rounded curve
           zigzagPoints[i].dx,
@@ -297,8 +302,8 @@ class PaintCard extends CustomPainter {
       }
     }
     // Top-right corner
-    pathInside.lineTo(w - a - s, s);
-    pathInside.arcToPoint(Offset(w - s, a + s), radius: Radius.circular(a));
+    pathFill.lineTo(w - a - s, s);
+    pathFill.arcToPoint(Offset(w - s, a + s), radius: Radius.circular(a));
     // Generate random zigzag points vertically
     zigzagPoints = List.generate(
         zigzagCountVertical,
@@ -310,9 +315,9 @@ class PaintCard extends CustomPainter {
     // Draw the zigzag pathInside with rounded curves vertically
     for (int i = 0; i < zigzagCountVertical; i++) {
       if (i == 0) {
-        pathInside.lineTo(zigzagPoints[i].dx, zigzagPoints[i].dy); // Move to first point
+        pathFill.lineTo(zigzagPoints[i].dx, zigzagPoints[i].dy); // Move to first point
       } else {
-        pathInside.quadraticBezierTo(
+        pathFill.quadraticBezierTo(
           zigzagPoints[i - 1].dx,
           (zigzagPoints[i - 1].dy + zigzagPoints[i].dy) / 2, // Control point for rounded curve
           zigzagPoints[i].dx,
@@ -322,8 +327,8 @@ class PaintCard extends CustomPainter {
     }
 
     // Bottom-right corner
-    pathInside.lineTo(w - s, h - a - s);
-    pathInside.arcToPoint(Offset(w - a - s, h - s), radius: Radius.circular(a));
+    pathFill.lineTo(w - s, h - a - s);
+    pathFill.arcToPoint(Offset(w - a - s, h - s), radius: Radius.circular(a));
 
     // Generate random zigzag points horizontally for the bottom part
     zigzagPointsBottom = List.generate(
@@ -336,9 +341,9 @@ class PaintCard extends CustomPainter {
     // Draw the zigzag pathInside with rounded curves for the bottom part
     for (int i = 0; i < zigzagCountHorizontal; i++) {
       if (i == 0) {
-        pathInside.lineTo(zigzagPointsBottom[i].dx, zigzagPointsBottom[i].dy); // Move to first point
+        pathFill.lineTo(zigzagPointsBottom[i].dx, zigzagPointsBottom[i].dy); // Move to first point
       } else {
-        pathInside.quadraticBezierTo(
+        pathFill.quadraticBezierTo(
           (zigzagPointsBottom[i - 1].dx + zigzagPointsBottom[i].dx) / 2,
           zigzagPointsBottom[i - 1].dy, // Control point for rounded curve
           zigzagPointsBottom[i].dx,
@@ -348,8 +353,8 @@ class PaintCard extends CustomPainter {
     }
 
     // Bottom-left corner
-    pathInside.lineTo(a + s, h - s);
-    pathInside.arcToPoint(Offset(s, h - a - s), radius: Radius.circular(a));
+    pathFill.lineTo(a + s, h - s);
+    pathFill.arcToPoint(Offset(s, h - a - s), radius: Radius.circular(a));
 
     // Generate random zigzag points vertically for the left side
     zigzagPointsLeft = List.generate(
@@ -362,9 +367,9 @@ class PaintCard extends CustomPainter {
 // Draw the zigzag pathInside with rounded curves for the left side
     for (int i = 0; i < zigzagCountVertical; i++) {
       if (i == 0) {
-        pathInside.lineTo(zigzagPointsLeft[i].dx, zigzagPointsLeft[i].dy); // Move to first point
+        pathFill.lineTo(zigzagPointsLeft[i].dx, zigzagPointsLeft[i].dy); // Move to first point
       } else {
-        pathInside.quadraticBezierTo(
+        pathFill.quadraticBezierTo(
           zigzagPointsLeft[i - 1].dx,
           (zigzagPointsLeft[i - 1].dy + zigzagPointsLeft[i].dy) / 2, // Control point for rounded curve
           zigzagPointsLeft[i].dx,
@@ -374,31 +379,33 @@ class PaintCard extends CustomPainter {
     }
 
     // Top-left corner
-    pathInside.lineTo(s, a + s);
-    pathInside.arcToPoint(Offset(a + s, s), radius: Radius.circular(a));
+    pathFill.lineTo(s, a + s);
+    pathFill.arcToPoint(Offset(a + s, s), radius: Radius.circular(a));
 
     // Close the pathInside
-    pathInside.close();
+    pathFill.close();
 
     // Calculate translation values
     double translateY = elevation * 2.5;
     double translateX = elevation * 2;
     // Create a copy of the original path
-    Path copiedPath = Path.from(path);
+    Path shadowPath = Path.from(pathBorder);
     // Apply translation to the copied path
-    copiedPath = copiedPath.shift(Offset(translateX, translateY));
+    shadowPath = shadowPath.shift(Offset(translateX, translateY));
 
-    // Apply scaling to the copied path
-    // Matrix4 scalingMatrix = Matrix4.identity()..scale(scaleFactor, scaleFactor, scaleFactor);
-    // copiedPath = copiedPath.transform(scalingMatrix.storage);
+    // Create a paint object with reduced opacity
+    Paint shadowPaint = Paint()..color = Colors.black.withOpacity(shadowOpacity);
 
-    int opacity = 50; // Range from 0 (completely transparent) to 255 (completely opaque)
+    Path combinedPath = Path.combine(PathOperation.difference, pathBorder, pathFill);
 
-// Create a paint object with reduced opacity
-    Paint paintCopied = Paint()..color = Colors.black.withOpacity(opacity / 255.0);
-    canvas.drawPath(copiedPath, paintCopied);
-    canvas.drawPath(path, borderPaint);
-    canvas.drawPath(pathInside, paint);
+    final paint = Paint()
+      ..color = backgroundColor
+      ..style = PaintingStyle.fill;
+    final borderPaint = Paint()..color = borderColor;
+
+    if (elevation > 0) canvas.drawPath(shadowPath, shadowPaint);
+    if (borderThickness > 0) canvas.drawPath(combinedPath, borderPaint);
+    canvas.drawPath(pathFill, paint);
   }
 
   @override
