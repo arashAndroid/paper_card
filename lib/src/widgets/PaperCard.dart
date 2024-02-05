@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:widget_mask/widget_mask.dart';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 class PaperCard extends StatelessWidget {
   /// child to your widget.
   final Widget? child;
@@ -402,9 +404,18 @@ class PaintCard extends CustomPainter {
       ..color = backgroundColor
       ..style = PaintingStyle.fill;
     final borderPaint = Paint()..color = borderColor;
+    // check if running on web and backgroundColor has opacity less than 1, then make borderPaint a stroke type
+
+    if (kIsWeb && backgroundColor.opacity < 1) {
+      borderPaint
+        ..style = PaintingStyle.stroke
+        ..strokeMiterLimit = 20
+        ..strokeJoin = StrokeJoin.miter
+        ..strokeWidth = borderThickness * 0.75;
+    }
 
     if (elevation > 0) canvas.drawPath(shadowPath, shadowPaint);
-    if (borderThickness > 0) canvas.drawPath(combinedPath, borderPaint);
+    if (borderThickness > 0) canvas.drawPath(pathBorder, borderPaint);
     canvas.drawPath(pathFill, paint);
   }
 

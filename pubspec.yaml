@@ -1,6 +1,6 @@
 name: paper_card
 description: A paper card for Flutter. It is a card that looks like a cartoonish paper. It is customizable and you can add your texture on it.
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/arashAndroid/paper_card.git
 
 environment:
