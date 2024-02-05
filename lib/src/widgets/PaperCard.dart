@@ -415,7 +415,7 @@ class PaintCard extends CustomPainter {
     }
 
     if (elevation > 0) canvas.drawPath(shadowPath, shadowPaint);
-    if (borderThickness > 0) canvas.drawPath(pathBorder, borderPaint);
+    if (borderThickness > 0) canvas.drawPath((kIsWeb && backgroundColor.opacity < 1) ? pathBorder : combinedPath, borderPaint);
     canvas.drawPath(pathFill, paint);
   }
 
