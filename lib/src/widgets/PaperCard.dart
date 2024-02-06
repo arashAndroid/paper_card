@@ -41,13 +41,19 @@ class PaperCard extends StatelessWidget {
   final double? shadowOpacity;
 
   /// Put image in assets and provide path for crayon texture (there is an example texture in example).
-  final String? crayonAssetPath;
+  final String? textureAssetPath;
 
   /// If the texture of crayon should be on the card.
-  final bool crayonTexture;
+  final bool texture;
 
   /// BlendMode for the crayon texture.
-  final BlendMode crayonTextureBlendMode;
+  final BlendMode textureBlendMode;
+
+  /// BlendMode for the crayon texture.
+  final double? textureOpacity;
+
+  /// BlendMode for the crayon texture.
+  final BoxFit textureFit;
 
   const PaperCard({
     Key? key,
@@ -62,9 +68,11 @@ class PaperCard extends StatelessWidget {
     this.borderRadius = 5,
     this.elevation = 2,
     this.shadowOpacity = 0.2,
-    this.crayonTexture = true,
-    this.crayonAssetPath,
-    this.crayonTextureBlendMode = BlendMode.overlay,
+    this.texture = true,
+    this.textureAssetPath,
+    this.textureBlendMode = BlendMode.overlay,
+    this.textureOpacity,
+    this.textureFit = BoxFit.cover,
   }) : super(key: key);
 
   @override
@@ -108,17 +116,20 @@ class PaperCard extends StatelessWidget {
               ),
             ),
           ),
-          if (crayonTexture && crayonAssetPath != null)
+          if (texture && textureAssetPath != null)
             Positioned.fill(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(borderRadius ?? 5),
-                child: SaveLayer(
-                  paint: Paint()..blendMode = crayonTextureBlendMode,
-                  child: RotatedBox(
-                    quarterTurns: Random().nextInt(4),
-                    child: Image(
-                      image: AssetImage(crayonAssetPath!),
-                      fit: BoxFit.cover,
+                child: Opacity(
+                  opacity: textureOpacity ?? 1,
+                  child: SaveLayer(
+                    paint: Paint()..blendMode = textureBlendMode,
+                    child: RotatedBox(
+                      quarterTurns: Random().nextInt(4),
+                      child: Image(
+                        image: AssetImage(textureAssetPath!),
+                        fit: textureFit,
+                      ),
                     ),
                   ),
                 ),
@@ -398,25 +409,17 @@ class PaintCard extends CustomPainter {
     // Create a paint object with reduced opacity
     Paint shadowPaint = Paint()..color = Colors.black.withOpacity(shadowOpacity);
 
-    Path combinedPath = Path.combine(PathOperation.difference, pathBorder, pathFill);
-
     final paint = Paint()
       ..color = backgroundColor
+      ..blendMode = BlendMode.srcOut
       ..style = PaintingStyle.fill;
     final borderPaint = Paint()..color = borderColor;
-    // check if running on web and backgroundColor has opacity less than 1, then make borderPaint a stroke type
-
-    if (kIsWeb && backgroundColor.opacity < 1) {
-      borderPaint
-        ..style = PaintingStyle.stroke
-        ..strokeMiterLimit = 20
-        ..strokeJoin = StrokeJoin.miter
-        ..strokeWidth = borderThickness * 0.75;
-    }
 
     if (elevation > 0) canvas.drawPath(shadowPath, shadowPaint);
-    if (borderThickness > 0) canvas.drawPath((kIsWeb && backgroundColor.opacity < 1) ? pathBorder : combinedPath, borderPaint);
+    canvas.saveLayer(Rect.fromLTWH(0, 0, size.width, size.height), borderPaint);
+    if (borderThickness > 0) canvas.drawPath((kIsWeb && backgroundColor.opacity < 1) ? pathBorder : pathBorder, borderPaint);
     canvas.drawPath(pathFill, paint);
+    canvas.restore();
   }
 
   @override

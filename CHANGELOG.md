@@ -1,3 +1,20 @@
+## 0.0.5
+
+**BREAKING CHANGES**
+
+- Changed: crayonAssetPath to textureAssetPath
+- Changed: crayonTexture to texture
+
+**IMPORTANT CHANGES**
+
+- Fixed: Removed path.combine and using new method to implement so it works on web like how it works on windows.
+
+**OTHER CHANGES**
+
+- Added: textureOpacity: Control the opacity of texture
+- Added: textureBlendMode: Control the blendMode of texture
+- Added: textureFit: Control the BoxFit of texture
+
 ## 0.0.4
 
 - Fixed: Combined path does not work on web (there is an ongoing issue on flutter github). so I had to fix it
