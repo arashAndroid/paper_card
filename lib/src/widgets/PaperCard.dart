@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:widget_mask/widget_mask.dart';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
-
 class PaperCard extends StatelessWidget {
   /// child to your widget.
   final Widget? child;
@@ -411,13 +409,13 @@ class PaintCard extends CustomPainter {
 
     final paint = Paint()
       ..color = backgroundColor
-      ..blendMode = BlendMode.srcOut
+      ..blendMode = BlendMode.src
       ..style = PaintingStyle.fill;
     final borderPaint = Paint()..color = borderColor;
 
     if (elevation > 0) canvas.drawPath(shadowPath, shadowPaint);
     canvas.saveLayer(Rect.fromLTWH(0, 0, size.width, size.height), borderPaint);
-    if (borderThickness > 0) canvas.drawPath((kIsWeb && backgroundColor.opacity < 1) ? pathBorder : pathBorder, borderPaint);
+    if (borderThickness > 0) canvas.drawPath(pathBorder, borderPaint);
     canvas.drawPath(pathFill, paint);
     canvas.restore();
   }

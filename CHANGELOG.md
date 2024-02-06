@@ -1,3 +1,7 @@
+## 0.1.1
+
+Fixed: Fixed a bug where border would cause weird shadows
+
 ## 0.1.0
 
 **BREAKING CHANGES**
