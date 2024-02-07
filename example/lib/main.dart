@@ -5,16 +5,21 @@ void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
         fontFamily: 'darya',
       ),
-      home: const Scaffold(
+      home: Scaffold(
         backgroundColor: Colors.red,
         body: Center(
           child: Row(
@@ -71,17 +76,22 @@ class MainApp extends StatelessWidget {
                   textDirection: TextDirection.rtl,
                 ),
               ),
-              PaperCard(
-                height: 100,
-                width: 200,
-                textureAssetPath: 'assets/crayon_mask.png',
-                child: Text(
-                  'تست فارسی ۱: سلام دنیا',
-                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
-                  textDirection: TextDirection.rtl,
+              InkWell(
+                onTap: () {
+                  print('Card Tapped');
+                  setState(() {});
+                },
+                child: PaperCard(
+                  height: 100,
+                  width: 200,
+                  textureAssetPath: 'assets/crayon_mask.png',
+                  backgroundColor: Color(0xFFFFF9E3),
+                  child: Text(
+                    'تست فارسیسسسسسس ۱: سلام دنیا',
+                    style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
+                    textDirection: TextDirection.rtl,
+                  ),
                 ),
-                backgroundColor: Color.fromARGB(153, 255, 211, 54),
-                textureOpacity: 0.1,
               ),
             ],
           ),

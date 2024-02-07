@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:widget_mask/widget_mask.dart';
 
-class PaperCard extends StatelessWidget {
+class PaperCard extends StatefulWidget {
   /// child to your widget.
   final Widget? child;
 
@@ -74,59 +74,86 @@ class PaperCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<PaperCard> createState() => _PaperCardState();
+}
+
+class _PaperCardState extends State<PaperCard> {
+  List<double> verticalZigZagRandomSeed = [];
+  List<double> horizontalZigZagRandomSeed = [];
+  int randomTextureQuarterRotation = 0;
+
+  @override
+  void initState() {
+    verticalZigZagRandomSeed = _generateZigZagRandomSeed();
+    horizontalZigZagRandomSeed = _generateZigZagRandomSeed();
+    randomTextureQuarterRotation = Random().nextInt(4);
+    super.initState();
+  }
+
+  List<double> _generateZigZagRandomSeed() {
+    List<double> randomSeed = [];
+    for (int i = 0; i < 100; i++) {
+      randomSeed.add(Random().nextDouble());
+    }
+    return randomSeed;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      margin: margin,
+      margin: widget.margin,
       child: Stack(
         fit: StackFit.passthrough,
         clipBehavior: Clip.none,
         children: [
           Container(
             decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(borderRadius ?? 5),
+              color: widget.backgroundColor,
+              borderRadius: BorderRadius.circular(widget.borderRadius ?? 5),
             ),
             child: CustomPaint(
               painter: PaintCard(
-                borderThickness: borderThickness ?? 5,
-                backgroundColor: backgroundColor ?? Colors.white,
-                borderColor: borderColor ?? const Color(0xFF020202),
-                borderRadius: borderRadius ?? 5,
-                elevation: elevation ?? 1,
-                shadowOpacity: shadowOpacity ?? 50,
+                borderThickness: widget.borderThickness ?? 5,
+                backgroundColor: widget.backgroundColor ?? Colors.white,
+                borderColor: widget.borderColor ?? const Color(0xFF020202),
+                borderRadius: widget.borderRadius ?? 5,
+                elevation: widget.elevation ?? 1,
+                shadowOpacity: widget.shadowOpacity ?? 50,
+                horizontalZigZagRandomSeed: horizontalZigZagRandomSeed,
+                verticalZigZagRandomSeed: verticalZigZagRandomSeed,
               ),
               child: PhysicalModel(
                 color: Colors.transparent,
                 elevation: 0.0,
-                borderRadius: BorderRadius.circular(borderRadius ?? 5),
+                borderRadius: BorderRadius.circular(widget.borderRadius ?? 5),
                 child: Container(
-                  padding: padding,
-                  height: height,
-                  width: width,
+                  padding: widget.padding,
+                  height: widget.height,
+                  width: widget.width,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(borderRadius ?? 5),
+                    borderRadius: BorderRadius.circular(widget.borderRadius ?? 5),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(borderThickness ?? 5.0),
-                    child: child,
+                    padding: EdgeInsets.all(widget.borderThickness ?? 5.0),
+                    child: widget.child,
                   ),
                 ),
               ),
             ),
           ),
-          if (texture && textureAssetPath != null)
+          if (widget.texture && widget.textureAssetPath != null)
             Positioned.fill(
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(borderRadius ?? 5),
+                borderRadius: BorderRadius.circular(widget.borderRadius ?? 5),
                 child: Opacity(
-                  opacity: textureOpacity ?? 1,
+                  opacity: widget.textureOpacity ?? 1,
                   child: SaveLayer(
-                    paint: Paint()..blendMode = textureBlendMode,
+                    paint: Paint()..blendMode = widget.textureBlendMode,
                     child: RotatedBox(
-                      quarterTurns: Random().nextInt(4),
+                      quarterTurns: randomTextureQuarterRotation,
                       child: Image(
-                        image: AssetImage(textureAssetPath!),
-                        fit: textureFit,
+                        image: AssetImage(widget.textureAssetPath!),
+                        fit: widget.textureFit,
                       ),
                     ),
                   ),
@@ -150,12 +177,16 @@ class PaintCard extends CustomPainter {
   final double borderRadius;
   final double elevation;
   final double shadowOpacity;
+  final List<double> horizontalZigZagRandomSeed;
+  final List<double> verticalZigZagRandomSeed;
 
   PaintCard({
     this.elevation = 1.0,
     required this.backgroundColor,
     required this.borderColor,
     required this.borderRadius,
+    required this.horizontalZigZagRandomSeed,
+    required this.verticalZigZagRandomSeed,
     this.borderThickness = 5.0,
     this.shadowOpacity = 50,
   });
@@ -172,13 +203,13 @@ class PaintCard extends CustomPainter {
     // a = 5;
     double s = 0;
     // Start
+
     pathBorder.moveTo(a + s, s);
     // path.arcToPoint(Offset(0, adjustedRadius), radius: Radius.circular(adjustedRadius));
     // Generate random zigzag points
     int zigzagCountHorizontal = (h / 50).floor(); // Adjust the number of zigzags as needed
     int zigzagCountVertical = (w / 50).floor(); // Adjust the number of zigzags vertically as needed
 
-    final random = Random();
     const zigzagHeight = 1.5; // Adjust this variable for zigzag height
     const zigzagWidth = 1.5; // Adjust this variable for zigzag height vertically
 
@@ -186,7 +217,9 @@ class PaintCard extends CustomPainter {
         zigzagCountHorizontal,
         (i) => Offset(
               a + s + i * (w - 2 * a - 2 * s) / (zigzagCountHorizontal + 1),
-              s + random.nextDouble() * zigzagHeight * 2 - zigzagHeight, // Randomize vertical position within range
+              s +
+                  horizontalZigZagRandomSeed[(zigzagCountHorizontal * 1) + i] * zigzagHeight * 2 -
+                  zigzagHeight, // Randomize vertical position within range
             ));
     // Draw the zigzag path with rounded curves
     for (int i = 0; i < zigzagCountHorizontal; i++) {
@@ -204,11 +237,15 @@ class PaintCard extends CustomPainter {
     // Top-right corner
     pathBorder.lineTo(w - a - s, s);
     pathBorder.arcToPoint(Offset(w - s, a + s), radius: Radius.circular(a));
+
     // Generate random zigzag points vertically
     zigzagPoints = List.generate(
         zigzagCountVertical,
         (i) => Offset(
-              w - s + random.nextDouble() * zigzagWidth * 2 - zigzagWidth, // Randomize horizontal position within range
+              w -
+                  s +
+                  verticalZigZagRandomSeed[(zigzagCountVertical * 1) + i] * zigzagWidth * 2 -
+                  zigzagWidth, // Randomize horizontal position within range
               a + s + i * (h - 2 * a - 2 * s) / (zigzagCountVertical + 1),
             ));
 
@@ -231,12 +268,14 @@ class PaintCard extends CustomPainter {
     pathBorder.arcToPoint(Offset(w - a - s, h - s), radius: Radius.circular(a));
 
     // Generate random zigzag points horizontally for the bottom part
-    final randomBottom = Random();
     var zigzagPointsBottom = List.generate(
         zigzagCountHorizontal,
         (i) => Offset(
               w - a - s - (i + 1) * (w - 2 * a - 2 * s) / (zigzagCountHorizontal + 1),
-              h - s + randomBottom.nextDouble() * zigzagHeight * 2 - zigzagHeight, // Randomize vertical position within range
+              h -
+                  s +
+                  horizontalZigZagRandomSeed[(zigzagCountHorizontal * 2) + i] * zigzagHeight * 2 -
+                  zigzagHeight, // Randomize vertical position within range
             ));
 
     // Draw the zigzag path with rounded curves for the bottom part
@@ -258,11 +297,10 @@ class PaintCard extends CustomPainter {
     pathBorder.arcToPoint(Offset(s, h - a - s), radius: Radius.circular(a));
 
     // Generate random zigzag points vertically for the left side
-    final randomLeft = Random();
     var zigzagPointsLeft = List.generate(
         zigzagCountVertical,
         (i) => Offset(
-              s + randomLeft.nextDouble() * zigzagWidth * 2 - zigzagWidth, // Randomize horizontal position within range
+              s + verticalZigZagRandomSeed[(zigzagCountVertical * 2) + i] * zigzagWidth * 2 - zigzagWidth,
               h - a - s - (i + 1) * (h - 2 * a - 2 * s) / (zigzagCountVertical + 1),
             ));
 
@@ -297,7 +335,9 @@ class PaintCard extends CustomPainter {
         zigzagCountHorizontal,
         (i) => Offset(
               a + s + i * (w - 2 * a - 2 * s) / (zigzagCountHorizontal + 1),
-              s + random.nextDouble() * zigzagHeight * 2 - zigzagHeight, // Randomize vertical position within range
+              s +
+                  horizontalZigZagRandomSeed[(zigzagCountHorizontal * 3) + i] * zigzagHeight * 2 -
+                  zigzagHeight, // Randomize vertical position within range
             ));
     // Draw the zigzag pathInside with rounded curves
     for (int i = 0; i < zigzagCountHorizontal; i++) {
@@ -319,7 +359,10 @@ class PaintCard extends CustomPainter {
     zigzagPoints = List.generate(
         zigzagCountVertical,
         (i) => Offset(
-              w - s + random.nextDouble() * zigzagWidth * 2 - zigzagWidth, // Randomize horizontal position within range
+              w -
+                  s +
+                  verticalZigZagRandomSeed[(zigzagCountVertical * 3) + i] * zigzagWidth * 2 -
+                  zigzagWidth, // Randomize horizontal position within range
               a + s + i * (h - 2 * a - 2 * s) / (zigzagCountVertical + 1),
             ));
 
@@ -346,7 +389,10 @@ class PaintCard extends CustomPainter {
         zigzagCountHorizontal,
         (i) => Offset(
               w - a - s - (i + 1) * (w - 2 * a - 2 * s) / (zigzagCountHorizontal + 1),
-              h - s + randomBottom.nextDouble() * zigzagHeight * 2 - zigzagHeight, // Randomize vertical position within range
+              h -
+                  s +
+                  horizontalZigZagRandomSeed[(zigzagCountHorizontal * 4) + i] * zigzagHeight * 2 -
+                  zigzagHeight, // Randomize vertical position within range
             ));
 
     // Draw the zigzag pathInside with rounded curves for the bottom part
@@ -371,7 +417,9 @@ class PaintCard extends CustomPainter {
     zigzagPointsLeft = List.generate(
         zigzagCountVertical,
         (i) => Offset(
-              s + randomLeft.nextDouble() * zigzagWidth * 2 - zigzagWidth, // Randomize horizontal position within range
+              s +
+                  verticalZigZagRandomSeed[(zigzagCountVertical * 4) + i] * zigzagWidth * 2 -
+                  zigzagWidth, // Randomize horizontal position within range
               h - a - s - (i + 1) * (h - 2 * a - 2 * s) / (zigzagCountVertical + 1),
             ));
 

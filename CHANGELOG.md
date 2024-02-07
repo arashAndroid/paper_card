@@ -1,3 +1,7 @@
+## 0.1.2
+
+Fixed: Fixed a bug where path changed on each state change
+
 ## 0.1.1
 
 Fixed: Fixed a bug where border would cause weird shadows
