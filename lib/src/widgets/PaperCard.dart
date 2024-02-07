@@ -209,8 +209,6 @@ class PaintCard extends CustomPainter {
     // Generate random zigzag points
     int zigzagCountHorizontal = (w / 50).floor(); // Adjust the number of zigzags as needed
     int zigzagCountVertical = (h / 50).floor(); // Adjust the number of zigzags vertically as needed
-    print('zigzagCountHorizontal: $zigzagCountHorizontal');
-    print('zigzagCountVertical: $zigzagCountVertical');
 
     const zigzagHeight = 1.5; // Adjust this variable for zigzag height
     const zigzagWidth = 1.5; // Adjust this variable for zigzag height vertically

@@ -1,3 +1,7 @@
+## 0.1.4
+
+Fixed: Removed the prints!
+
 ## 0.1.3
 
 Fixed: Fixed a bug where random seed index range goes bigger than length
