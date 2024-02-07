@@ -207,8 +207,10 @@ class PaintCard extends CustomPainter {
     pathBorder.moveTo(a + s, s);
     // path.arcToPoint(Offset(0, adjustedRadius), radius: Radius.circular(adjustedRadius));
     // Generate random zigzag points
-    int zigzagCountHorizontal = (h / 50).floor(); // Adjust the number of zigzags as needed
-    int zigzagCountVertical = (w / 50).floor(); // Adjust the number of zigzags vertically as needed
+    int zigzagCountHorizontal = (w / 50).floor(); // Adjust the number of zigzags as needed
+    int zigzagCountVertical = (h / 50).floor(); // Adjust the number of zigzags vertically as needed
+    print('zigzagCountHorizontal: $zigzagCountHorizontal');
+    print('zigzagCountVertical: $zigzagCountVertical');
 
     const zigzagHeight = 1.5; // Adjust this variable for zigzag height
     const zigzagWidth = 1.5; // Adjust this variable for zigzag height vertically
@@ -218,7 +220,7 @@ class PaintCard extends CustomPainter {
         (i) => Offset(
               a + s + i * (w - 2 * a - 2 * s) / (zigzagCountHorizontal + 1),
               s +
-                  horizontalZigZagRandomSeed[(zigzagCountHorizontal * 1) + i] * zigzagHeight * 2 -
+                  horizontalZigZagRandomSeed[((zigzagCountHorizontal * 1) + i) % 100] * zigzagHeight * 2 -
                   zigzagHeight, // Randomize vertical position within range
             ));
     // Draw the zigzag path with rounded curves
@@ -244,7 +246,7 @@ class PaintCard extends CustomPainter {
         (i) => Offset(
               w -
                   s +
-                  verticalZigZagRandomSeed[(zigzagCountVertical * 1) + i] * zigzagWidth * 2 -
+                  verticalZigZagRandomSeed[((zigzagCountVertical * 1) + i) % 100] * zigzagWidth * 2 -
                   zigzagWidth, // Randomize horizontal position within range
               a + s + i * (h - 2 * a - 2 * s) / (zigzagCountVertical + 1),
             ));
@@ -274,7 +276,7 @@ class PaintCard extends CustomPainter {
               w - a - s - (i + 1) * (w - 2 * a - 2 * s) / (zigzagCountHorizontal + 1),
               h -
                   s +
-                  horizontalZigZagRandomSeed[(zigzagCountHorizontal * 2) + i] * zigzagHeight * 2 -
+                  horizontalZigZagRandomSeed[((zigzagCountHorizontal * 2) + i) % 100] * zigzagHeight * 2 -
                   zigzagHeight, // Randomize vertical position within range
             ));
 
@@ -300,7 +302,7 @@ class PaintCard extends CustomPainter {
     var zigzagPointsLeft = List.generate(
         zigzagCountVertical,
         (i) => Offset(
-              s + verticalZigZagRandomSeed[(zigzagCountVertical * 2) + i] * zigzagWidth * 2 - zigzagWidth,
+              s + verticalZigZagRandomSeed[((zigzagCountVertical * 2) + i) % 100] * zigzagWidth * 2 - zigzagWidth,
               h - a - s - (i + 1) * (h - 2 * a - 2 * s) / (zigzagCountVertical + 1),
             ));
 
@@ -336,7 +338,7 @@ class PaintCard extends CustomPainter {
         (i) => Offset(
               a + s + i * (w - 2 * a - 2 * s) / (zigzagCountHorizontal + 1),
               s +
-                  horizontalZigZagRandomSeed[(zigzagCountHorizontal * 3) + i] * zigzagHeight * 2 -
+                  horizontalZigZagRandomSeed[((zigzagCountHorizontal * 3) + i) % 100] * zigzagHeight * 2 -
                   zigzagHeight, // Randomize vertical position within range
             ));
     // Draw the zigzag pathInside with rounded curves
@@ -361,7 +363,7 @@ class PaintCard extends CustomPainter {
         (i) => Offset(
               w -
                   s +
-                  verticalZigZagRandomSeed[(zigzagCountVertical * 3) + i] * zigzagWidth * 2 -
+                  verticalZigZagRandomSeed[((zigzagCountVertical * 3) + i) % 100] * zigzagWidth * 2 -
                   zigzagWidth, // Randomize horizontal position within range
               a + s + i * (h - 2 * a - 2 * s) / (zigzagCountVertical + 1),
             ));
@@ -391,7 +393,7 @@ class PaintCard extends CustomPainter {
               w - a - s - (i + 1) * (w - 2 * a - 2 * s) / (zigzagCountHorizontal + 1),
               h -
                   s +
-                  horizontalZigZagRandomSeed[(zigzagCountHorizontal * 4) + i] * zigzagHeight * 2 -
+                  horizontalZigZagRandomSeed[((zigzagCountHorizontal * 4) + i) % 100] * zigzagHeight * 2 -
                   zigzagHeight, // Randomize vertical position within range
             ));
 
@@ -418,7 +420,7 @@ class PaintCard extends CustomPainter {
         zigzagCountVertical,
         (i) => Offset(
               s +
-                  verticalZigZagRandomSeed[(zigzagCountVertical * 4) + i] * zigzagWidth * 2 -
+                  verticalZigZagRandomSeed[((zigzagCountVertical * 4) + i) % 100] * zigzagWidth * 2 -
                   zigzagWidth, // Randomize horizontal position within range
               h - a - s - (i + 1) * (h - 2 * a - 2 * s) / (zigzagCountVertical + 1),
             ));

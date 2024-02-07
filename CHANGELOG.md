@@ -1,3 +1,7 @@
+## 0.1.3
+
+Fixed: Fixed a bug where random seed index range goes bigger than length
+
 ## 0.1.2
 
 Fixed: Fixed a bug where path changed on each state change
